@@ -25,10 +25,12 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run script
         run: python script.py
+      - name: Move static file to site directory
+        run: |
+          mkdir _site/
+          mv index.html _site/index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        with:
-          path: index.html
 
   deploy:
     permissions:
