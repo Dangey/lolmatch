@@ -1,4 +1,5 @@
 from leaguepedia_parser import get_tournaments, get_matches
+import os
 
 def fetch_tournaments():
     from datetime import datetime
@@ -29,7 +30,7 @@ def fetch_match_data(tournament_name):
             score = f"{match.teams[0].score} - {match.teams[1].score}" if match.teams[0].score and match.teams[1].score else "TBD"
             date = match.startDT.split(' ')[0]  # Extract the date from the startDT field
             formatted_matches.append({
-                "region": tournament_name,  # Use the full tournament name for LCK/2025 tournaments
+                "region": tournament_name,
                 "team1": team1,
                 "team2": team2,
                 "score": score,
@@ -49,30 +50,8 @@ def generate_html(matches):
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>League of Legends Match Scores</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .winner { color: green; font-weight: bold; }
-        .loser { color: red; }
-        .tournament-link { margin-bottom: 20px; }
-        .tabs { display: flex; margin-bottom: 20px; }
-        .tab { margin-right: 10px; padding: 10px; background-color: #f4f4f4; border: 1px solid #ddd; cursor: pointer; }
-        .tab.active { background-color: #ddd; font-weight: bold; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-    </style>
-    <script>
-        function showTab(region) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            document.getElementById(region).classList.add('active');
-            document.getElementById(`${region}-tab`).classList.add('active');
-        }
-    </script>
+    <link rel='stylesheet' href='styles.css'>
+    <script src='scripts.js'></script>
 </head>
 <body>
     <h1>League of Legends Match Scores</h1>
@@ -145,7 +124,8 @@ def generate_html(matches):
 """
     return html_content
 
-def save_html_file(content, filename="index.html"):
+def save_html_file(content, filename):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w", encoding="utf-8") as file:
         file.write(content)
 
@@ -163,9 +143,17 @@ def main():
 
     print("Generating HTML...")
     html_content = generate_html(all_matches)
+
     print("Saving HTML file...")
-    save_html_file(html_content)
-    print("Website generated successfully!")
+    destdir = "_site"
+    os.makedirs(destdir, exist_ok=True)
+    save_html_file(html_content, os.path.join(destdir, "index.html"))
+
+    # Move CSS and JS files to the '_site' directory
+    for dir in ["css", "js"]:
+        if os.path.exists(dir):
+            for file in os.listdir(dir):
+                os.rename(os.path.join(dir, file), os.path.join(destdir, file))
 
 if __name__ == "__main__":
     main()
