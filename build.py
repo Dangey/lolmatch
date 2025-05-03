@@ -1,9 +1,8 @@
 from leaguepedia_parser import get_tournaments, get_matches
+from datetime import datetime
 import os, shutil
 
 def fetch_tournaments():
-    from datetime import datetime
-
     current_year = datetime.now().year
     regions = ["Korea", "EMEA", "China"]  # LCK, LEC, LPL
     all_tournaments = []
@@ -44,7 +43,7 @@ def fetch_match_data(tournament_name):
         return []
 
 def generate_html(matches):
-    html_content = """<!DOCTYPE html>
+    html_content = f"""<!DOCTYPE html>
 <html lang='en'>
 <head>
     <meta charset='UTF-8'>
@@ -55,8 +54,9 @@ def generate_html(matches):
 </head>
 <body>
     <h1>League of Legends Match Scores</h1>
+    <p>Last updated on {datetime.now().strftime('%B %d, %Y')}</p>
     <div class='tabs'>
-        <div id='LEC-tab' class='tab' onclick="showTab('LEC')">LEC</div>
+        <div id='LEC-tab' class='tab active' onclick="showTab('LEC')">LEC</div>
         <div id='LCK-tab' class='tab' onclick="showTab('LCK')">LCK</div>
         <div id='LPL-tab' class='tab' onclick="showTab('LPL')">LPL</div>
     </div>

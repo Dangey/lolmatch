@@ -1,12 +1,136 @@
-body { font-family: Arial, sans-serif; margin: 20px; }
-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-th { background-color: #f4f4f4; }
-.winner { color: green; font-weight: bold; }
-.loser { color: red; }
-.tournament-link { margin-bottom: 20px; }
-.tabs { display: flex; margin-bottom: 20px; }
-.tab { margin-right: 10px; padding: 10px; background-color: #f4f4f4; border: 1px solid #ddd; cursor: pointer; }
-.tab.active { background-color: #ddd; font-weight: bold; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #2c3e50;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.tab {
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+    background-color: #2980b9;
+}
+
+.tab.active {
+    background-color: #2ecc71;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Tournament Headers */
+h2 {
+    margin-top: 20px;
+    color: #34495e;
+}
+
+/* Match Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Winner and Loser Highlighting */
+.winner {
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.loser {
+    color: #e74c3c;
+}
+
+/* Details Element */
+details {
+    margin-top: 10px;
+}
+
+details summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #2980b9;
+}
+
+details[open] summary {
+    color: #2ecc71;
+}
+
+/* Center and italicize the 'last updated on' line */
+p {
+    text-align: center;
+    font-style: italic;
+    margin-top: 10px;
+    color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        margin: 5px 0;
+    }
+
+    table th, table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
