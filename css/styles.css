@@ -1,0 +1,12 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+th { background-color: #f4f4f4; }
+.winner { color: green; font-weight: bold; }
+.loser { color: red; }
+.tournament-link { margin-bottom: 20px; }
+.tabs { display: flex; margin-bottom: 20px; }
+.tab { margin-right: 10px; padding: 10px; background-color: #f4f4f4; border: 1px solid #ddd; cursor: pointer; }
+.tab.active { background-color: #ddd; font-weight: bold; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }

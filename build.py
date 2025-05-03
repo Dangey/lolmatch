@@ -1,5 +1,5 @@
 from leaguepedia_parser import get_tournaments, get_matches
-import os
+import os, shutil
 
 def fetch_tournaments():
     from datetime import datetime
@@ -153,7 +153,7 @@ def main():
     for dir in ["css", "js"]:
         if os.path.exists(dir):
             for file in os.listdir(dir):
-                os.rename(os.path.join(dir, file), os.path.join(destdir, file))
+                shutil.copy(os.path.join(dir, file), os.path.join(destdir, file))
 
 if __name__ == "__main__":
     main()
