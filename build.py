@@ -1,6 +1,9 @@
 from leaguepedia_parser import get_tournaments, get_matches
 from datetime import datetime
-import os, shutil
+import os, shutil, time
+
+max_attempts = 5
+delay_seconds = 60
 
 def fetch_tournaments():
     current_year = datetime.now().year
@@ -18,29 +21,36 @@ def fetch_tournaments():
     return all_tournaments
 
 def fetch_match_data(tournament_name):
-    try:
-        matches = get_matches(tournament_overview_page=tournament_name)
 
-        # Transform the data into a more readable format
-        formatted_matches = []
-        for match in matches:
-            team1 = match.teams[0].name
-            team2 = match.teams[1].name
-            score = f"{match.teams[0].score} - {match.teams[1].score}" if match.teams[0].score and match.teams[1].score else "TBD"
-            date = match.startDT.split(' ')[0]  # Extract the date from the startDT field
-            formatted_matches.append({
-                "region": tournament_name,
-                "team1": team1,
-                "team2": team2,
-                "score": score,
-                "date": date
-            })
+    for attempt in range(1, max_attempts + 1):
+        try:
+            matches = get_matches(tournament_overview_page=tournament_name)
 
-        return formatted_matches
+            # Transform the data into a more readable format
+            formatted_matches = []
+            for match in matches:
+                team1 = match.teams[0].name
+                team2 = match.teams[1].name
+                score = f"{match.teams[0].score} - {match.teams[1].score}" if match.teams[0].score and match.teams[1].score else "TBD"
+                date = match.startDT.split(' ')[0]  # Extract the date from the startDT field
+                formatted_matches.append({
+                    "region": tournament_name,
+                    "team1": team1,
+                    "team2": team2,
+                    "score": score,
+                    "date": date
+                })
 
-    except Exception as e:
-        print(f"Error fetching matches for tournament '{tournament_name}': {e}")
-        return []
+            return formatted_matches
+
+        except Exception as e:
+            print(f"Error fetching matches for tournament '{tournament_name}': {e.args[0]}")
+            if attempt < max_attempts:
+                print(f"Retrying attempt {attempt} in {delay_seconds} seconds...")
+                time.sleep(delay_seconds)
+            else:
+                print("Max retries reached. Raising exception.")
+                raise  # Re-raises the last exception if all attempts fail
 
 def generate_html(matches):
     html_content = f"""<!DOCTYPE html>
@@ -132,6 +142,7 @@ def save_html_file(content, filename):
 def main():
     print("Fetching available tournaments...")
     tournaments = fetch_tournaments()
+    print(tournaments)
 
     all_matches = []
     for tournament_name in tournaments:
